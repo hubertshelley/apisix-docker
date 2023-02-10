@@ -33,7 +33,7 @@ services:
     image: apache/apisix:latest
     restart: always
     volumes:
-      - ./apisix_log:/usr/local/apisix/logs
+      # - ./apisix_log:/usr/local/apisix/logs
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
     depends_on:
       - etcd
@@ -115,8 +115,8 @@ services:
     networks:
       apisix:
   nacos:
-    image: nacos/nacos-server:v${NACOS_VERSION}
-    container_name: nacos-standalone
+    image: nacos/nacos-server:latest
+    # container_name: nacos-standalone
     environment:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
