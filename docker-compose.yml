@@ -22,11 +22,12 @@ services:
     image: apache/apisix-dashboard:3.0.0-alpine
     restart: always
     volumes:
-    - ./dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+      - ./dashboard_conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
     ports:
-    - "9000:9000"
+      - "9000:9000"
     networks:
       apisix:
+
 
   apisix:
     image: apache/apisix:latest
@@ -46,6 +47,7 @@ services:
     networks:
       apisix:
 
+
   etcd:
     image: bitnami/etcd:3.4.15
     restart: always
@@ -61,6 +63,7 @@ services:
     networks:
       apisix:
 
+
   web1:
     image: nginx:1.19.0-alpine
     restart: always
@@ -72,6 +75,7 @@ services:
       - NGINX_PORT=80
     networks:
       apisix:
+
 
   web2:
     image: nginx:1.19.0-alpine
@@ -85,6 +89,7 @@ services:
     networks:
       apisix:
 
+
   prometheus:
     image: prom/prometheus:v2.25.0
     restart: always
@@ -92,6 +97,9 @@ services:
       - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    depends_on:
+      - nacos
+      - apisix
     networks:
       apisix:
 
@@ -99,13 +107,24 @@ services:
     image: grafana/grafana:7.3.7
     restart: always
     ports:
-      - "3000:3000"
+      - "13000:3000"
     volumes:
       - "./grafana_conf/provisioning:/etc/grafana/provisioning"
       - "./grafana_conf/dashboards:/var/lib/grafana/dashboards"
       - "./grafana_conf/config/grafana.ini:/etc/grafana/grafana.ini"
     networks:
       apisix:
+  nacos:
+    image: nacos/nacos-server:v${NACOS_VERSION}
+    container_name: nacos-standalone
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    volumes:
+      - ./standalone-logs/:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
 
 networks:
   apisix:
