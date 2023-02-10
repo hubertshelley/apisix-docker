@@ -37,6 +37,7 @@ services:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
     depends_on:
       - etcd
+      - nacos
     ##network_mode: host
     ports:
       - "9180:9180/tcp"
