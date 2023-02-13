@@ -51,6 +51,6 @@ plugin_attr:
       port: 9091
 
 discovery:
-  nacos:
-    host:
-      - "http://nacos:8848"
+  consul:
+    servers:
+      - "http://192.168.110.11:8500"

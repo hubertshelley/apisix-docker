@@ -37,7 +37,6 @@ services:
       - ./apisix_conf/config.yaml:/usr/local/apisix/conf/config.yaml:ro
     depends_on:
       - etcd
-      - nacos
     ##network_mode: host
     ports:
       - "9180:9180/tcp"
@@ -99,7 +98,6 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - nacos
       - apisix
     networks:
       apisix:
@@ -115,17 +113,6 @@ services:
       - "./grafana_conf/config/grafana.ini:/etc/grafana/grafana.ini"
     networks:
       apisix:
-  nacos:
-    image: nacos/nacos-server:v${NACOS_VERSION}
-    container_name: nacos-standalone
-    environment:
-      - PREFER_HOST_MODE=hostname
-      - MODE=standalone
-    # volumes:
-    #   - ./standalone-logs/:/home/nacos/logs
-    ports:
-      - "8848:8848"
-      - "9848:9848"
 
 networks:
   apisix:
